@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MathQuest - Gamified Learning</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-brand">
+            <span class="nav-logo">🧮</span>
+            <span class="nav-title">MathQuest</span>
+        </div>
+        <div class="nav-user">
+            <span class="user-points">0 pts</span>
+            <span class="user-level">Level 1</span>
+        </div>
+    </nav>
+
+    <!-- Main App Container -->
+    <div class="app-container">
+        
+        <!-- Welcome/Dashboard Screen -->
+        <div id="dashboard" class="screen active">
+            <div class="welcome-section">
+                <h1 class="welcome-title">🌟 Welcome Back!</h1>
+                <p class="welcome-subtitle">Ready to continue your math adventure?</p>
+                
+                <div class="progress-overview">
+                    <div class="total-progress">
+                        <h3>Your Progress</h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" data-progress="0"></div>
+                        </div>
+                        <span class="progress-text">0% Complete</span>
+                    </div>
+                </div>
+
+                <div class="recent-badges">
+                    <h3>Latest Achievement</h3>
+                    <div class="badge-showcase" id="latest-badge">
+                        <span>Complete your first lesson to earn a badge!</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sections-grid">
+                <div class="section-card" data-section="arithmetic">
+                    <div class="section-header">
+                        <span class="section-icon">➕</span>
+                        <h3>Basic Arithmetic</h3>
+                    </div>
+                    <p class="section-description">Addition, subtraction, multiplication, division</p>
+                    <div class="section-progress">
+                        <div class="progress-bar small">
+                            <div class="progress-fill" data-section-progress="arithmetic"></div>
+                        </div>
+                        <span class="progress-levels">0/5 levels complete</span>
+                    </div>
+                </div>
+
+                <div class="section-card" data-section="algebra">
+                    <div class="section-header">
+                        <span class="section-icon">🔤</span>
+                        <h3>Basic Algebra</h3>
+                    </div>
+                    <p class="section-description">Variables, equations, expressions, factoring</p>
+                    <div class="section-progress">
+                        <div class="progress-bar small">
+                            <div class="progress-fill" data-section-progress="algebra"></div>
+                        </div>
+                        <span class="progress-levels">0/5 levels complete</span>
+                    </div>
+                </div>
+
+                <div class="section-card" data-section="trigonometry">
+                    <div class="section-header">
+                        <span class="section-icon">📐</span>
+                        <h3>Basic Trigonometry</h3>
+                    </div>
+                    <p class="section-description">Angles, sine, cosine, tangent basics</p>
+                    <div class="section-progress">
+                        <div class="progress-bar small">
+                            <div class="progress-fill" data-section-progress="trigonometry"></div>
+                        </div>
+                        <span class="progress-levels">0/5 levels complete</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <button class="btn btn--secondary" onclick="showScreen('profile')">
+                    👤 View Profile
+                </button>
+                <button class="btn btn--secondary" onclick="showScreen('leaderboard')">
+                    🏆 Leaderboard
+                </button>
+            </div>
+        </div>
+
+        <!-- Section Level Selection -->
+        <div id="section-levels" class="screen">
+            <div class="screen-header">
+                <button class="btn btn--outline back-btn" onclick="showScreen('dashboard')">
+                    ← Back
+                </button>
+                <h2 id="section-title">Section Levels</h2>
+            </div>
+
+            <div class="levels-grid" id="levels-container">
+                <!-- Levels will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Lesson Screen -->
+        <div id="lesson" class="screen">
+            <div class="screen-header">
+                <button class="btn btn--outline back-btn" id="lesson-back-btn">
+                    ← Back
+                </button>
+                <h2 id="lesson-title">Lesson</h2>
+            </div>
+
+            <div class="lesson-content">
+                <!-- Explanation Phase -->
+                <div id="explanation-phase" class="lesson-phase">
+                    <div class="concept-card">
+                        <h3 id="concept-title">Concept</h3>
+                        <p id="concept-explanation">Explanation will appear here...</p>
+                        
+                        <div class="examples-section">
+                            <h4>Examples:</h4>
+                            <div id="examples-list" class="examples-grid">
+                                <!-- Examples will be populated by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn--primary btn--full-width" onclick="startQuiz()">
+                            Start Quiz 📝
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Phase -->
+                <div id="quiz-phase" class="lesson-phase hidden">
+                    <div class="quiz-header">
+                        <h3>Quiz Time! 🧠</h3>
+                        <div class="quiz-progress">
+                            <span id="question-counter">Question 1 of 3</span>
+                            <div class="quiz-progress-bar">
+                                <div class="quiz-progress-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <h4 id="question-text">Question will appear here...</h4>
+                        <div id="question-options" class="options-grid">
+                            <!-- Options will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="quiz-feedback hidden" id="quiz-feedback">
+                        <div class="feedback-content">
+                            <span class="feedback-icon"></span>
+                            <p class="feedback-text"></p>
+                        </div>
+                        <button class="btn btn--primary" onclick="nextQuestion()">
+                            Next Question →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results Phase -->
+                <div id="results-phase" class="lesson-phase hidden">
+                    <div class="results-card">
+                        <div class="results-header">
+                            <h3>🎉 Quiz Complete!</h3>
+                            <div class="score-display">
+                                <span class="score-number" id="final-score">0</span>
+                                <span class="score-total">/ 3</span>
+                            </div>
+                        </div>
+
+                        <div class="results-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Points Earned</span>
+                                <span class="stat-value" id="points-earned">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Accuracy</span>
+                                <span class="stat-value" id="accuracy-percent">0%</span>
+                            </div>
+                        </div>
+
+                        <div class="new-badges" id="new-badges-container">
+                            <!-- New badges will appear here -->
+                        </div>
+
+                        <div class="results-actions">
+                            <button class="btn btn--outline" onclick="retryLesson()">
+                                🔄 Retry Lesson
+                            </button>
+                            <button class="btn btn--primary" onclick="continueToNext()">
+                                Continue →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Screen -->
+        <div id="profile" class="screen">
+            <div class="screen-header">
+                <button class="btn btn--outline back-btn" onclick="showScreen('dashboard')">
+                    ← Back
+                </button>
+                <h2>Your Profile</h2>
+            </div>
+
+            <div class="profile-content">
+                <div class="profile-stats">
+                    <div class="stat-card">
+                        <span class="stat-icon">⭐</span>
+                        <div class="stat-info">
+                            <span class="stat-number" id="profile-points">0</span>
+                            <span class="stat-label">Total Points</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-icon">🎯</span>
+                        <div class="stat-info">
+                            <span class="stat-number" id="profile-level">1</span>
+                            <span class="stat-label">Current Level</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-icon">🔥</span>
+                        <div class="stat-info">
+                            <span class="stat-number" id="profile-streak">0</span>
+                            <span class="stat-label">Day Streak</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievements-section">
+                    <h3>Achievements 🏆</h3>
+                    <div class="badges-grid" id="user-badges">
+                        <!-- Badges will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="progress-section">
+                    <h3>Progress by Section</h3>
+                    <div class="section-progress-list">
+                        <div class="section-progress-item">
+                            <span class="section-name">➕ Arithmetic</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" data-section-progress="arithmetic"></div>
+                            </div>
+                            <span class="progress-text" id="arithmetic-progress-text">0/5</span>
+                        </div>
+                        <div class="section-progress-item">
+                            <span class="section-name">🔤 Algebra</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" data-section-progress="algebra"></div>
+                            </div>
+                            <span class="progress-text" id="algebra-progress-text">0/5</span>
+                        </div>
+                        <div class="section-progress-item">
+                            <span class="section-name">📐 Trigonometry</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" data-section-progress="trigonometry"></div>
+                            </div>
+                            <span class="progress-text" id="trigonometry-progress-text">0/5</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Screen -->
+        <div id="leaderboard" class="screen">
+            <div class="screen-header">
+                <button class="btn btn--outline back-btn" onclick="showScreen('dashboard')">
+                    ← Back
+                </button>
+                <h2>🏆 Leaderboard</h2>
+            </div>
+
+            <div class="leaderboard-content">
+                <div class="leaderboard-tabs">
+                    <button class="tab-btn active" data-tab="weekly">This Week</button>
+                    <button class="tab-btn" data-tab="monthly">This Month</button>
+                </div>
+
+                <div class="leaderboard-list" id="leaderboard-list">
+                    <!-- Leaderboard entries will be populated by JavaScript -->
+                </div>
+
+                <div class="your-rank">
+                    <h3>Your Ranking</h3>
+                    <div class="rank-card user-rank">
+                        <span class="rank-number">5</span>
+                        <div class="rank-info">
+                            <span class="rank-name">You</span>
+                            <span class="rank-points">0 points</span>
+                        </div>
+                        <span class="rank-level">Level 1</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="showScreen('dashboard')">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Home</span>
+        </button>
+        <button class="nav-item" onclick="showScreen('profile')">
+            <span class="nav-icon">👤</span>
+            <span class="nav-label">Profile</span>
+        </button>
+        <button class="nav-item" onclick="showScreen('leaderboard')">
+            <span class="nav-icon">🏆</span>
+            <span class="nav-label">Leaderboard</span>
+        </button>
+    </nav>
+
+    <script src="app.js"></script>
+</body>
+</html>
